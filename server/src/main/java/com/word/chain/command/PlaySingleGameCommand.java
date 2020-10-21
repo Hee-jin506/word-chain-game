@@ -63,9 +63,11 @@ public class PlaySingleGameCommand implements Command {
     out.println("[level1 시작!]");
     String first = Prompt.inputString("단어를 입력하세요. : ", out, in);
     
-    words.get(first.charAt(0));
+    out.println("컴퓨터 : " + words.firstAttack());
+    Prompt.inputString("당신 : ", out, in);
+    
+    
     
   }
   
-  public void from
 }
