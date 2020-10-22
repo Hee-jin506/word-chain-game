@@ -6,11 +6,17 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import com.word.util.Prompt;
 
+// Stateful 통신
+// => 서버와 연결하여 간단한 메시지 주고 받기
+// => 사용자가 입력한 명령을 서버에 전송하기
+// => 사용자가 quit 명령을 입력할 때까지 반복한다.
+// => 서버가 응답의 끝을 알리는 빈 줄을 보낼 때까지 클라이언트는 계속 읽는다.
+// => 애플리케이션 아규먼트를 통해 서버의 주소와 포트번호를 입력 받는다.
+//
 public class ClientApp {
-
-  static String host;
-  static int port;
-
+  
+  static String id = "";
+  
   public static void main(String[] args) {
     if (args.length != 2) {
       System.out.println("프로그램 사용법:");
@@ -18,67 +24,29 @@ public class ClientApp {
       System.exit(0);
     }
 
-    host = args[0];
-    port = Integer.parseInt(args[1]);
-
-    loop :
     while (true) {
-      String request = "";
-      System.out.println("[안녕하세요, 끝말잇기 게임에 오신 것을 환영합니다!]");
-      System.out.println("(1) 회원가입");
-      System.out.println("(2) 로그인");
-      System.out.println("(3) 나가기");
-
-      switch (Prompt.inputString("숫자를 입력하세요.: ")) {
-        case "1":
-          request = "/member/add";
-          break;
-        case "2":
-          request = "/member/login";
-          break;
-        case "3":
-          break loop;
-        case "4":
-          request = "/member/list";
-          break;
-      }
-
-      request(request);
-
-      if (request.equalsIgnoreCase("stop"))
-        break;
-    }
-    System.out.println("안녕!");
-  }
-
-  private static void request(String message) {
-    // 클라이언트가 서버에 stop 명령을 보내면 다음 변수를 true로 변경한다.
-    boolean stop = false;
-
-    try (Socket socket = new Socket(host, port);
+    try (Socket socket = new Socket(args[0], Integer.parseInt(args[1]));
         PrintWriter out = new PrintWriter(socket.getOutputStream());
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
 
-      out.println(message);
-      out.flush();
+        out.println(id);
+        out.flush();
+        
+        receiveResponse(out, in);
 
-      receiveResponse(out, in);
+        String input = Prompt.inputString("숫자를 입력하세요.");
+        
+        if (input.equalsIgnoreCase("quit"))
+          break;
+        
+        out.println(input);
+        out.flush();
+        
+        receiveResponse(out, in);
 
-      if (message.equalsIgnoreCase("stop")) {
-        stop = true;
-      }
     } catch (Exception e) {
       e.printStackTrace();
     }
-
-    if (stop) {
-      // 서버를 멈추기 위해 그냥 접속했다가 끊는다.
-      try (Socket socket = new Socket(host, port)) {
-        // 아무것도 안한다.
-        // 서버가 stop 할 기회를 주기 위함이다.
-      } catch (Exception e) {
-        // 아무것도 안한다.
-      }
     }
   }
 
@@ -91,10 +59,12 @@ public class ClientApp {
         // 사용자로부터 값을 입력을 받아서 서버에 보낸다.
         out.println(Prompt.inputString(""));
         out.flush(); // 주의! 출력하면 버퍼에 쌓인다. 서버로 보내고 싶다면 flush()를 호출하라!
+      } else if (response.endsWith("!{id}")) {
+        id = response.split("!")[0];
+        System.out.println(id);
       } else {
         System.out.println(response);
       }
     }
   }
-
 }

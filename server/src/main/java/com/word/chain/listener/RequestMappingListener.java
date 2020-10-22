@@ -10,6 +10,7 @@ import com.word.chain.command.LogInCommand;
 import com.word.chain.command.LogOutCommand;
 import com.word.chain.command.PlayMultiGameCommand;
 import com.word.chain.command.PlaySingleGameCommand;
+import com.word.chain.command.SettingsCommand;
 import com.word.chain.domain.Member;
 import com.word.chain.domain.WordList;
 import com.word.context.ApplicationContextListener;
@@ -33,6 +34,7 @@ public class RequestMappingListener implements ApplicationContextListener {
     context.put("/member/list", new ListMemberCommand(memberList));
     context.put("/play/multi", new PlayMultiGameCommand(memberList, levelList));
     context.put("/play/single", new PlaySingleGameCommand(memberList, levelList));
+    context.put("/member/settings", new SettingsCommand(memberList));
   }
 
   @Override
