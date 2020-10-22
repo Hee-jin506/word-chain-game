@@ -34,6 +34,7 @@ public class LogInCommand implements Command {
       return;
     }
       out.println("로그인 성공!");
+      out.println();
 
     } catch (Exception e) {
       out.printf("작업 처리 중 오류 발생! - %s\n", e.getMessage());
