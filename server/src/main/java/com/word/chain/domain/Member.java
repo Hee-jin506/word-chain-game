@@ -1,23 +1,18 @@
 package com.word.chain.domain;
 
-import java.sql.Date;
-
-//Member 클래스는 더이상 CsvObject를 구현할 필요가 없다.
-//
 public class Member {
-  private int no;
+  private String id;
   private String name;
-  private String email;
   private String password;
-  private String photo;
-  private String tel;
-  private Date registeredDate;
+  private String computer;
+  private WordList usedWords;
+  private int maxLevel;
 
-  public int getNo() {
-    return no;
+  public String getId() {
+    return id;
   }
-  public void setNo(int no) {
-    this.no = no;
+  public void setId(String id) {
+    this.id = id;
   }
   public String getName() {
     return name;
@@ -25,34 +20,28 @@ public class Member {
   public void setName(String name) {
     this.name = name;
   }
-  public String getEmail() {
-    return email;
-  }
-  public void setEmail(String email) {
-    this.email = email;
-  }
   public String getPassword() {
     return password;
   }
   public void setPassword(String password) {
     this.password = password;
   }
-  public String getPhoto() {
-    return photo;
+  public String getComputer() {
+    return computer;
   }
-  public void setPhoto(String photo) {
-    this.photo = photo;
+  public void setComputer(String computer) {
+    this.computer = computer;
   }
-  public String getTel() {
-    return tel;
+  public WordList getUsedWords() {
+    return usedWords;
   }
-  public void setTel(String tel) {
-    this.tel = tel;
+  public void setUsedWords(WordList usedWords) {
+    this.usedWords = usedWords;
   }
-  public Date getRegisteredDate() {
-    return registeredDate;
+  public int getMaxLevel() {
+    return maxLevel;
   }
-  public void setRegisteredDate(Date registeredDate) {
-    this.registeredDate = registeredDate;
+  public void setMaxLevel(int maxLevel) {
+    this.maxLevel = maxLevel;
   }
 }
