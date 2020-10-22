@@ -153,6 +153,9 @@ public class ServerApp {
             break;
           case "stop":
             break;
+          case "3":
+            ((Command)context.get("/member/list")).execute(out, in);
+            break;
           default:
             out.println("유효하지 않은 명령입니다.");
             out.flush();

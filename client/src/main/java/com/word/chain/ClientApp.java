@@ -6,13 +6,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import com.word.util.Prompt;
 
-// Stateful 통신
-// => 서버와 연결하여 간단한 메시지 주고 받기
-// => 사용자가 입력한 명령을 서버에 전송하기
-// => 사용자가 quit 명령을 입력할 때까지 반복한다.
-// => 서버가 응답의 끝을 알리는 빈 줄을 보낼 때까지 클라이언트는 계속 읽는다.
-// => 애플리케이션 아규먼트를 통해 서버의 주소와 포트번호를 입력 받는다.
-//
 public class ClientApp {
   
   static boolean stop = false;

@@ -32,6 +32,13 @@ public class DataHandlerListener implements ApplicationContextListener {
     // 파일에서 데이터 로딩
     loadData(memberList, memberFile, Member[].class);
     loadData(levelList, levelFile, WordList[].class);
+    
+     for (int i = 0; i < 20; i++) {
+       WordList words = new WordList();
+       
+       levelList.add(words);
+       
+     }
 
     // 옵저버가 파일에서 데이터(게시글,회원,프로젝트,작업)를 읽어
     // List 컬렉션에 저장한 다음,
@@ -64,6 +71,7 @@ public class DataHandlerListener implements ApplicationContextListener {
     } catch (Exception e) {
       System.out.printf("'%s' 파일 읽기 중 오류 발생! - %s\n",
           file.getName(), e.getMessage());
+      e.printStackTrace();
 
     } finally {
       try {
