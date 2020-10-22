@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 import java.util.List;
 import com.word.chain.domain.Member;
 
-public class LogOutCommand implements Command {
+public class LogOutCommand extends LoggedInCommand {
  List<Member> memberList;
   
   public LogOutCommand(List<Member> list) {

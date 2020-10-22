@@ -7,7 +7,7 @@ import com.word.chain.domain.Member;
 import com.word.chain.domain.WordList;
 import com.word.util.Prompt;
 
-public class PlaySingleGameCommand implements Command {
+public class PlaySingleGameCommand extends LoggedInCommand {
 
   List<Member> memberList;
   List<WordList> levelList;

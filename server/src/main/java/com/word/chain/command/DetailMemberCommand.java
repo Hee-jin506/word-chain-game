@@ -6,7 +6,7 @@ import java.util.List;
 import com.word.chain.domain.Member;
 import com.word.util.Prompt;
 
-public class DetailMemberCommand implements Command {
+public class DetailMemberCommand extends LoggedInCommand {
 
   List<Member> memberList;
 

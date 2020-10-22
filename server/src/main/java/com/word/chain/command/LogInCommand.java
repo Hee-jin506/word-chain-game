@@ -6,7 +6,7 @@ import java.util.List;
 import com.word.chain.domain.Member;
 import com.word.util.Prompt;
 
-public class LogInCommand implements Command {
+public class LogInCommand extends LoggedOutCommand {
 
   List<Member> memberList;
   

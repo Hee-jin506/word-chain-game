@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import com.word.chain.command.Command;
+import com.word.chain.command.LoggedInCommand;
 import com.word.chain.listener.DataHandlerListener;
 import com.word.chain.listener.RequestMappingListener;
 import com.word.context.ApplicationContextListener;
@@ -117,7 +118,7 @@ public class ServerApp {
   }
 
   private static void handleClient(Socket clientSocket) {
-    
+
     InetAddress address = clientSocket.getInetAddress();
     System.out.printf("클라이언트(%s)가 연결되었습니다.\n",
         address.getHostAddress());
@@ -128,18 +129,26 @@ public class ServerApp {
 
       // 클라이언트가 보낸 요청을 읽는다.
       String id = in.readLine();
-      
+
       String request = null;
 
-      if (id.length() == 0) {
+      if (id.equals("")) {
         out.println("[안녕하세요, 끝말잇기 게임에 오신 것을 환영합니다!]");
         out.println("(1) 회원가입");
         out.println("(2) 로그인");
         out.println("(quit) 나가기");
         out.println();
         out.flush();
-        
+
         request = in.readLine();
+
+        if (request.equalsIgnoreCase("stop")) {
+          stop = true; // 서버의 상태를 멈추라는 의미로 true로 설정한다.
+          out.println("서버를 종료하는 중입니다!");
+          out.println();
+          out.flush();
+          return;
+        }
         
         switch (request) {
           case "1":
@@ -151,27 +160,65 @@ public class ServerApp {
           case "3":
             break;
           default:
-             out.println("유효하지 않은 명령입니다.");
-             out.flush();
+            out.println("유효하지 않은 명령입니다.");
+            out.flush();
         } 
-      } 
-      
-      if (request.equalsIgnoreCase("stop")) {
-        stop = true; // 서버의 상태를 멈추라는 의미로 true로 설정한다.
-        out.println("서버를 종료하는 중입니다!");
+      } else {
+
+        out.println("[메인 메뉴]");
+        out.println("(1) 싱글 게임");
+        out.println("(2) 멀티 게임");
+        out.println("(3) 설정");
+        out.println("(4) 로그아웃");
+        out.println("(5) 나가기");
         out.println();
         out.flush();
-        return;
+
+        request = in.readLine();
+        
+        if (request.equalsIgnoreCase("stop")) {
+          stop = true; // 서버의 상태를 멈추라는 의미로 true로 설정한다.
+          out.println("서버를 종료하는 중입니다!");
+          out.println();
+          out.flush();
+          return;
+        }
+
+        switch (request) {
+          case "1":
+            request = "/play/single";
+            break;
+          case "2":
+            request = "/play/multi";
+            break;
+          case "3":
+            request = "/member/settings";
+            break;
+          case "4":
+            request = "/member/logout";
+            break;
+          case "5":
+            break;
+          default:
+            out.println("유효하지 않은 명령입니다.");
+            out.flush();
+        }
       }
+
+
 
       Command command = (Command) context.get(request);
-      if (command != null) {
-        command.execute(out, in);
-      } else {
+
+      if (command == null) {
         out.println("해당 명령을 처리할 수 없습니다!");
+      } else {
+        
+        if (command instanceof LoggedInCommand) 
+          ((LoggedInCommand)command).registerMember(id);
+        
+        command.execute(out, in);
       }
 
-      // 응답의 끝을 알리는 빈 문자열을 보낸다.
       out.println();
       out.flush();
 

@@ -4,10 +4,19 @@ public class Member {
   private String id;
   private String name;
   private String password;
-  private String computer;
+  private String computer = "컴퓨터";
   private WordList usedWords = new WordList();
+  private boolean teachingComputer = true;
   private int maxLevel;
+  
+  
 
+  public boolean isTeachingComputer() {
+    return teachingComputer;
+  }
+  public void setTeachingComputer(boolean teachingComputer) {
+    this.teachingComputer = teachingComputer;
+  }
   public String getId() {
     return id;
   }

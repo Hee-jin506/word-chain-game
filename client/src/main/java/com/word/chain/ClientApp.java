@@ -33,17 +33,20 @@ public class ClientApp {
         out.flush();
         
         receiveResponse(out, in);
-
-        String input = Prompt.inputString("숫자를 입력하세요.");
         
+        String input = Prompt.inputString("숫자를 입력하세요.");
+
         if (input.equalsIgnoreCase("quit"))
           break;
         
         out.println(input);
         out.flush();
         
+        if (input.equalsIgnoreCase("stop"))
+          break;
+        
         receiveResponse(out, in);
-
+        
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -53,16 +56,20 @@ public class ClientApp {
   private static void receiveResponse(PrintWriter out, BufferedReader in) throws Exception {
     while (true) {
       String response = in.readLine();
+      
       if (response.length() == 0) {
         break;
+      }
+        else if (response.endsWith("!{id}")) {
+          System.out.println(response);
+          id = response.split("!")[0];
+       
+      
       } else if (response.equals("!{}!")) {
-        // 사용자로부터 값을 입력을 받아서 서버에 보낸다.
         out.println(Prompt.inputString(""));
-        out.flush(); // 주의! 출력하면 버퍼에 쌓인다. 서버로 보내고 싶다면 flush()를 호출하라!
-      } else if (response.endsWith("!{id}")) {
-        id = response.split("!")[0];
-        System.out.println(id);
-      } else {
+        out.flush();
+        
+      }  else {
         System.out.println(response);
       }
     }

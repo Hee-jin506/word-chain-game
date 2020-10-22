@@ -6,7 +6,7 @@ import java.util.List;
 import com.word.chain.domain.Member;
 import com.word.chain.domain.WordList;
 
-public class PlayMultiGameCommand implements Command {
+public class PlayMultiGameCommand extends LoggedInCommand {
   
   List<Member> memberList;
   List<WordList> levelList;

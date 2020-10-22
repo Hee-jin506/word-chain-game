@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import com.word.chain.domain.Member;
 
-public class ListMemberCommand implements Command {
+public class ListMemberCommand extends LoggedOutCommand {
 
   List<Member> memberList;
 
