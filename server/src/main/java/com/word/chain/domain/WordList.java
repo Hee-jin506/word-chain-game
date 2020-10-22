@@ -14,6 +14,8 @@ public class WordList extends HashMap<Character, ArrayList<String>> {
   }
 
   public void add(String word) {
+    if (word.length() == 0)
+      return;
     get(word.charAt(0)).add(word);
   }
 
@@ -28,7 +30,7 @@ public class WordList extends HashMap<Character, ArrayList<String>> {
   }
 
   public String attack(String word) {
-    return random(word.charAt(0));
+    return random(word.charAt(word.length() - 1));
   }
 
   public String firstAttack() {
@@ -47,5 +49,23 @@ public class WordList extends HashMap<Character, ArrayList<String>> {
     } else {
       return null;
     }
+  }
+  
+  public static void main(String[] args) {
+    WordList words = new WordList();
+    words.add("admin");
+    words.add("bus");
+    words.add("car");
+    words.add("dirt");
+    words.add("enum");
+    words.add("flower");
+    words.add("gun");
+    words.add("humble");
+    words.add("image");
+    words.add("juice");
+    words.add("king");
+    words.add("large");
+    
+    words.list();
   }
 }

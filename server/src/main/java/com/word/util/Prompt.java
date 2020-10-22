@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Prompt {
   static Scanner keyboardScan = new Scanner(System.in);
@@ -52,5 +55,30 @@ public class Prompt {
   // 이 메서드를 호출하여 System.in 입력 스트림 자원을 해제하도록 한다.
   public static void close() {
     keyboardScan.close();
+  }
+
+  public static String inputStringTimer(String title, int time) {
+    ExecutorService threadPool = Executors.newCachedThreadPool();
+    threadPool.execute(() -> Prompt.inputString(title));
+    threadPool.shutdown();
+    
+    try {
+      if (!threadPool.awaitTermination(time, TimeUnit.SECONDS)) {
+        System.out.println("타임아웃! 종료안됨");
+        threadPool.shutdownNow();
+        return null;
+      } else {
+        System.out.println("입력함. 종료됨");
+        return null;
+      }
+      
+    } catch (Exception e) {
+      System.out.println("예외발생");
+      return null;
+    }
+  }
+  
+  public static void main(String[] args) {
+    System.out.println(inputStringTimer("5초 입력: ", 5));
   }
 }

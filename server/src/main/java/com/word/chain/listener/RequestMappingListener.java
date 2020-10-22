@@ -36,11 +36,8 @@ public class RequestMappingListener implements ApplicationContextListener {
   @SuppressWarnings("unchecked")
   @Override
   public void contextInitialized(Map<String,Object> context) {
-    // 옵저버가 작업한 결과를 맵에서 꺼낸다.
-    List<Board> boardList = (List<Board>) context.get("boardList");
-    List<Member> memberList = (List<Member>) context.get("memberList");
-    List<Project> projectList = (List<Project>) context.get("projectList");
-    List<Task> taskList = (List<Task>) context.get("taskList");
+    List<Wor>
+    List<Member> members = (List<Member>) context.get("memberList");
 
     context.put("/board/add", new BoardAddCommand(boardList));
     context.put("/board/list", new BoardListCommand(boardList));
