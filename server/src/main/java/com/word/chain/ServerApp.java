@@ -205,8 +205,6 @@ public class ServerApp {
         }
       }
 
-
-
       Command command = (Command) context.get(request);
 
       if (command == null) {
