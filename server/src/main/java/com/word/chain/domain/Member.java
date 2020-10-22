@@ -5,7 +5,7 @@ public class Member {
   private String name;
   private String password;
   private String computer;
-  private WordList usedWords;
+  private WordList usedWords = new WordList();
   private int maxLevel;
 
   public String getId() {

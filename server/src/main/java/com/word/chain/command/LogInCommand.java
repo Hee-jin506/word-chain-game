@@ -41,11 +41,10 @@ public class LogInCommand implements Command {
 
 
 
-
   private int indexOf(String id) { // 아이디값 일치여부 검증
     for (int i = 0; i < memberList.size(); i++) {
       Member member = memberList.get(i);
-      if (member.getId() == id) {
+      if (member.getId().equals(id)) {
         return i;
       }
     }
@@ -55,7 +54,7 @@ public class LogInCommand implements Command {
   private int indexOf2(String id, String password) { // 아이디, 비밀번호값 일치여부 검증
     for (int i = 0; i < memberList.size(); i++) {
       Member member = memberList.get(i);
-      if(member.getId() == id && member.getPassword() == password) {
+      if(member.getId().equals(id) && member.getPassword().equals(password)) {
         return i;
       }
     }

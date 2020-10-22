@@ -1,5 +1,7 @@
 package com.word.chain.domain;
 
+import java.io.BufferedReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -19,13 +21,13 @@ public class WordList extends HashMap<Character, ArrayList<String>> {
     get(word.charAt(0)).add(word);
   }
 
-  public void list() {
+  public void list(PrintWriter out, BufferedReader in) {
     Set<Character> keys = keySet();
     for (char key : keys) {
-      System.out.print(key + " : ");
+      out.print(key + " : ");
       for (String word : get(key))
-        System.out.print(word + " ");
-      System.out.println();
+        out.print(word + " ");
+      out.println();
     }
   }
 
@@ -50,7 +52,7 @@ public class WordList extends HashMap<Character, ArrayList<String>> {
       return null;
     }
   }
-  
+
   public static void main(String[] args) {
     WordList words = new WordList();
     words.add("admin");
@@ -65,7 +67,7 @@ public class WordList extends HashMap<Character, ArrayList<String>> {
     words.add("juice");
     words.add("king");
     words.add("large");
-    
+
     words.list();
   }
 }

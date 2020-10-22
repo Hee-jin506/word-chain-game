@@ -39,7 +39,7 @@ public class DetailMemberCommand implements Command {
   private Member findById(String id) {
     for (int i = 0; i < memberList.size(); i++) {
       Member member = memberList.get(i);
-      if (member.getId() == id) {
+      if (member.getId().equals(id)) {
         return member;
       }
     }

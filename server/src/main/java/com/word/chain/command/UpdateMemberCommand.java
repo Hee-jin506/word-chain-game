@@ -53,7 +53,7 @@ public class UpdateMemberCommand implements Command {
   private int findByPassword(String password) {
     for (int i = 0; i < memberList.size(); i++) {
       Member member = memberList.get(i);
-      if(member.getPassword() == password) {
+      if(member.getPassword().equals(password)) {
         return i;
       }
     }
