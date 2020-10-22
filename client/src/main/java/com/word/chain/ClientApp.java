@@ -20,20 +20,32 @@ public class ClientApp {
 
     host = args[0];
     port = Integer.parseInt(args[1]);
-
+    
+    loop : 
     while (true) {
-      String input = Prompt.inputString("명령> ");
-      if (input.equalsIgnoreCase("quit"))
-        break;
+      String request = "";
+      System.out.println("[안녕하세요, 끝말잇기 게임에 오신 것을 환영합니다!]");
+      System.out.println("(1) 회원가입");
+      System.out.println("(2) 로그인");
+      System.out.println("(3) 나가기");
+      
+      switch (Prompt.inputString("숫자를 입력하세요.: ")) {
+        case "1":
+          request = "/member/add";
+          break;
+        case "2":
+          request = "/member/login";
+          break;
+        case "3":
+          break loop;
+      }
 
-      request(input);
+      request(request);
 
-      if (input.equalsIgnoreCase("stop"))
+      if (request.equalsIgnoreCase("stop"))
         break;
     }
     System.out.println("안녕!");
-
-
   }
 
   private static void request(String message) {
@@ -81,4 +93,5 @@ public class ClientApp {
       }
     }
   }
+
 }

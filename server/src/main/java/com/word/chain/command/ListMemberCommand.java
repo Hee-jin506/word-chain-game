@@ -22,11 +22,12 @@ public class ListMemberCommand implements Command {
 
     while (iterator.hasNext()) {
       Member member = iterator.next();
-      out.printf("%d, %s, %s, %s\n",
+      out.printf("%d, %s, %s\n",
           member.getId(),
           member.getName(),
-          member.getMaxLevel(),
-          member.getUsedWords());
+          member.getMaxLevel());
+      out.println("(사용한 단어 목록)");
+      member.getUsedWords().list();
     }
   }
 }

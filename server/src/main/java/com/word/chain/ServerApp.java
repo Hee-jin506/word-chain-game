@@ -14,7 +14,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import com.word.chain.command.Command;
-import com.word.chain.listener.AppInitListener;
 import com.word.chain.listener.DataHandlerListener;
 import com.word.chain.listener.RequestMappingListener;
 import com.word.context.ApplicationContextListener;
@@ -111,7 +110,6 @@ public class ServerApp {
     ServerApp server = new ServerApp();
 
     // 리스너(옵저버/구독자) 등록
-    server.addApplicationContextListener(new AppInitListener());
     server.addApplicationContextListener(new DataHandlerListener());
     server.addApplicationContextListener(new RequestMappingListener());
 
@@ -128,7 +126,10 @@ public class ServerApp {
         PrintWriter out = new PrintWriter(socket.getOutputStream())) {
 
       // 클라이언트가 보낸 요청을 읽는다.
-      String request = in.readLine();
+      String id = in.readLine(); 
+      String password = in.readLine(); 
+      
+      String request = in.readLine(); 
 
       if (request.equalsIgnoreCase("stop")) {
         stop = true; // 서버의 상태를 멈추라는 의미로 true로 설정한다.

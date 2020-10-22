@@ -24,7 +24,6 @@ public class AddMemberCommand implements Command {
       member.setName(Prompt.inputString("이름: ", out, in));
       member.setPassword(Prompt.inputString("암호: ", out, in));
       member.setComputer(Prompt.inputString("상대 이름: ", out, in));
-      member.setMaxLevel(Prompt.inputInt("레벨: ", out, in));
 
       memberList.add(member);
 
