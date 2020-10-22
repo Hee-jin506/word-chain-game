@@ -34,14 +34,15 @@ public class LogInCommand implements Command {
       return;
     }
       out.println("로그인 성공!");
-      out.println();
+
+
+      out.println(id + "!{id}");
 
     } catch (Exception e) {
       out.printf("작업 처리 중 오류 발생! - %s\n", e.getMessage());
     }
+
   }
-
-
 
   private int indexOf(String id) { // 아이디값 일치여부 검증
     for (int i = 0; i < memberList.size(); i++) {
@@ -62,6 +63,5 @@ public class LogInCommand implements Command {
     }
     return -1;
   }
-
 
 }

@@ -117,6 +117,7 @@ public class ServerApp {
   }
 
   private static void handleClient(Socket clientSocket) {
+    
     InetAddress address = clientSocket.getInetAddress();
     System.out.printf("클라이언트(%s)가 연결되었습니다.\n",
         address.getHostAddress());
@@ -126,9 +127,35 @@ public class ServerApp {
         PrintWriter out = new PrintWriter(socket.getOutputStream())) {
 
       // 클라이언트가 보낸 요청을 읽는다.
+      String id = in.readLine();
       
-      String request = in.readLine(); 
+      String request = null;
 
+      if (id.length() == 0) {
+        out.println("[안녕하세요, 끝말잇기 게임에 오신 것을 환영합니다!]");
+        out.println("(1) 회원가입");
+        out.println("(2) 로그인");
+        out.println("(quit) 나가기");
+        out.println();
+        out.flush();
+        
+        request = in.readLine();
+        
+        switch (request) {
+          case "1":
+            request = "/member/add";
+            break;
+          case "2":
+            request = "/member/login";
+            break;
+          case "3":
+            break;
+          default:
+             out.println("유효하지 않은 명령입니다.");
+             out.flush();
+        } 
+      } 
+      
       if (request.equalsIgnoreCase("stop")) {
         stop = true; // 서버의 상태를 멈추라는 의미로 true로 설정한다.
         out.println("서버를 종료하는 중입니다!");
