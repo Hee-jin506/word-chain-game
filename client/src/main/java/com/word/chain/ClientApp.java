@@ -54,21 +54,45 @@ public class ClientApp {
     while (true) {
       String response = in.readLine();
       
-      if (response.length() == 0) {
+      if (response.equals("!{ends}")) {
         break;
       }
         else if (response.endsWith("!{id}")) {
-          System.out.println(response);
           id = response.split("!")[0];
-       
       
-      } else if (response.equals("!{}!")) {
-        out.println(Prompt.inputString(""));
+      } else if (response.endsWith("!{}")) {
+        out.println(Prompt.inputString(response.split("!")[0]));
         out.flush();
-        
-      }  else {
+      } /* else if (response.endsWith("!{time}")) {
+        int time = Integer.parseInt(response.split("!")[0]);
+        timer(time, out);
+      } */ else if (response.equals("!{noid}")) {
+        id = "";
+      } else {
         System.out.println(response);
       }
     }
   }
+  
+  //public static void timer(int time, PrintWriter out) {
+//    System.out.println("5초 셉니다.");
+//    Thread thread =new Thread() {
+//      @Override
+//      public void run() {
+//        Prompt.inputString("5초 셉니다.");
+//      }
+//    };
+//    thread.start();
+//    Timer timer = new Timer();
+//    TimerTask task = new TimerTask() {
+//      @Override
+//      public void run() {
+//        thread.interrupt();
+//        out.println("timeout");
+//      }
+//    };
+//    
+//    timer.schedule(task, 5000);
+//  }
 }
+ 

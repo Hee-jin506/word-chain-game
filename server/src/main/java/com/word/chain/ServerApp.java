@@ -137,7 +137,8 @@ public class ServerApp {
         out.println("(1) 회원가입");
         out.println("(2) 로그인");
         out.println("(quit) 나가기");
-        out.println();
+        
+        out.println("!{ends}");
         out.flush();
 
         request = in.readLine();
@@ -168,7 +169,7 @@ public class ServerApp {
         out.println("(3) 설정");
         out.println("(4) 로그아웃");
         out.println("(quit) 나가기");
-        out.println();
+        out.println("!{ends}");
         out.flush();
 
         request = in.readLine();
@@ -208,7 +209,7 @@ public class ServerApp {
         out.println("서버를 종료하는 중입니다!");
       }
 
-      out.println();
+      out.println("!{ends}");
       out.flush();
 
     } catch (Exception e) {

@@ -2,6 +2,7 @@ package com.word.chain.command;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import com.word.chain.domain.Member;
 import com.word.chain.domain.WordList;
@@ -9,7 +10,6 @@ import com.word.util.Prompt;
 
 public class PlaySingleGameCommand extends LoggedInCommand {
 
-  List<Member> memberList;
   List<WordList> levelList;
 
   public PlaySingleGameCommand(List<Member> memberList, List<WordList> levelList) {
@@ -27,17 +27,34 @@ public class PlaySingleGameCommand extends LoggedInCommand {
         out.println("(3) 메인메뉴");
         String response = Prompt.inputString("숫자를 입력하세요. : ", out, in);
 
-        switch (response) {
-          case "1":
-            from1To3(1, out, in);
-            return;
-          case "2":
-            break;
-          case "3":
-            return;
-          default:
-            out.println("유효하지 않은 명령입니다.");
-        }
+        loop:
+          switch (response) {
+            case "1":
+              playSingle(1, out, in);
+              return;
+            case "2":
+              out.printf("당신은 %d레벨까지 클리어했습니다.\n", super.loggedInMember.getMaxLevel());
+              int level = 0;
+              while (true) {
+                String str = Prompt.inputString(String.format("몇 레벨을 플레이하시겠습니까?(~%d, 뒤로가기-q) :", super.loggedInMember.getMaxLevel()), out, in);
+                if (str.equalsIgnoreCase("q"))
+                  break loop;
+                level = Integer.parseInt(str);
+                if (level > super.loggedInMember.getMaxLevel()) {
+                  out.printf("%d 이하의 레벨만 선택가능합니다.\n", super.loggedInMember.getMaxLevel());
+                } else if (level < 1) {
+                  out.println("1 이상의 레벨을 선택해주세요.");
+                } else {
+                  break;
+                }
+              }
+              playSingle(level, out, in);
+              break;
+            case "3":
+              return;
+            default:
+              out.println("유효하지 않은 명령입니다.");
+          }
       }
 
     } catch (Exception e) {
@@ -45,59 +62,98 @@ public class PlaySingleGameCommand extends LoggedInCommand {
     }
   }
 
-  public void from1To3(int level, PrintWriter out, BufferedReader in) throws Exception {
+  public void playSingle(int level, PrintWriter out, BufferedReader in) throws Exception {
+    String computer = super.loggedInMember.getComputer();
+    List<String> usedWords = new ArrayList<>();
     boolean win = false;
-    WordList words = levelList.get(level-1);
-    out.println("10초 안에 단어를 입력하세요!");
-
-    for (int i = 5; i >= 1; i--) {
-      out.print(i);
-      Thread.sleep(800);
+    WordList words = new WordList();
+    
+    for (String word : levelList.get(level-1))
+      words.add(word);
+    
+    if (loggedInMember.isTeachingComputer()) {
+      for (String word : super.loggedInMember.getUsedWords())
+        words.add(word);
     }
 
-    out.println("[level1 시작!]");
+    out.println("곧 끝말잇기 게임이 시작됩니다...!");
+    out.flush();
+
+    for (int i = 5; i >= 1; i--) {
+      Thread.sleep(500);
+      out.print(i + " ");
+      out.flush();
+    }
+
+    out.printf("\n[level%d 시작!]\n", level);
+    out.flush();
 
     String attack = words.firstAttack();
-    out.println("컴퓨터 : " + attack);
-
+    usedWords.add(attack);
+    out.printf("%s : %s\n", computer, attack);
 
     while (true) {
-      String defense = Prompt.inputString("당신 : "/*, out, in*/);
+      String defense = Prompt.inputString("당신 : ", out, in);
       if (defense.equals("")) {
         out.println("시간 초과!");
         break;
+      } else if (usedWords.contains(defense)) {
+        out.println("이미 사용된 단어입니다.");
+        break;
       } else if (defense.charAt(0) == attack.charAt(attack.length() - 1)) {
         out.println("ok!");
+        usedWords.add(defense);
+        super.loggedInMember.getUsedWords().add(defense);
       } else {
         out.println("틀렸습니다.");
         break;
       }
 
-      attack = words.attack(defense);
-      if (attack == null) {
-        out.println("컴퓨터 : " + defense.charAt(defense.length() - 1));
+      int i = 0;
+      for (; i < 3; i++) {
+        attack = words.attack(defense);
+        if (attack != null && !usedWords.contains(attack)) {
+          usedWords.add(attack);
+          out.printf("%s : %s\n", computer, attack);
+          break;
+        }
+      }
+
+      if (i == 3) {
+        out.printf("%s : %c\n", computer, defense.charAt(defense.length() - 1));
+        out.flush();
+        for (int j = 0; j < 4; j++) {
+          Thread.sleep(500);
+          out.print(". ");
+          out.flush();
+        }
+        out.println("\n컴퓨터는 더이상 단어가 떠오르지 않습니다.");
         win = true;
         break;
       }
     }
-    
+
     if (win) {
-      out.printf("[level%d 클리어]", level);
-      String nextLevel = Prompt.inputString("다음 레벨을 이어 하시겠습니까?(Y/n) : ");
+      out.printf("[level%d 클리어]\n", level);
+      String nextLevel = Prompt.inputString("다음 레벨을 이어 하시겠습니까?(Y/n) : ", out, in);
       if (nextLevel.equalsIgnoreCase("n")) {
         out.println("메인 메뉴로 갑니다.");
-        return ;
+        if (super.loggedInMember.getMaxLevel() < level) 
+          super.loggedInMember.setMaxLevel(level);
+        return;
+
       } else {
-        from1To3(level + 1, out, in);
+        playSingle(level + 1, out, in);
       }
     } else {
       out.println("[게임오버]");
-      String retry  = Prompt.inputString("다시 시도하시겠습니까?(Y/n) : ");
+      String retry  = Prompt.inputString("다시 시도하시겠습니까?(Y/n) : ", out, in);
       if (retry.equalsIgnoreCase("n")) {
         out.println("메인 메뉴로 갑니다.");
       } else {
-        from1To3(level, out, in);
+        playSingle(level, out, in);
       }
     }
   }
 }
+

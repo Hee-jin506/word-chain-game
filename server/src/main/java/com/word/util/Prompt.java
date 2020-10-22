@@ -4,9 +4,6 @@ import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.util.Scanner;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class Prompt {
   static Scanner keyboardScan = new Scanner(System.in);
@@ -23,8 +20,7 @@ public class Prompt {
       BufferedReader in) throws Exception {
     // 클라이언트로 출력할 때는 제목 다음에 "!{}!" 문자열을 보내
     // 클라이언트가 사용자로부터 값을 입력 받아 다시 서버에 보내도록 요청한다.
-    out.println(title); // 클라이언트가 출력할 프롬프트 제목
-    out.println("!{}!"); // 클라이언트에게 값을 보내라는 요청
+    out.println(title + "!{}"); // 클라이언트가 출력할 프롬프트 제목
     out.flush(); // 주의! 출력하면 버퍼에 쌓인다. 서버로 보내고 싶다면 flush()를 호출하라!
     return in.readLine(); // 클라이언트가 보낸 값을 읽기
   }
@@ -57,28 +53,25 @@ public class Prompt {
     keyboardScan.close();
   }
 
-  public static String inputStringTimer(String title, int time) {
-    ExecutorService threadPool = Executors.newCachedThreadPool();
-    threadPool.execute(() -> Prompt.inputString(title));
-    threadPool.shutdown();
-    
-    try {
-      if (!threadPool.awaitTermination(time, TimeUnit.SECONDS)) {
-        System.out.println("타임아웃! 종료안됨");
-        threadPool.shutdownNow();
-        return null;
-      } else {
-        System.out.println("입력함. 종료됨");
-        return null;
-      }
-      
-    } catch (Exception e) {
-      System.out.println("예외발생");
-      return null;
-    }
-  }
-  
-  public static void main(String[] args) {
-    System.out.println(inputStringTimer("5초 입력: ", 5));
-  }
+//  public static String inputStringTimer(String title, int time) {
+//    ExecutorService threadPool = Executors.newCachedThreadPool();
+//    threadPool.execute(() -> Prompt.inputString(title));
+//    threadPool.shutdown();
+//    
+//    try {
+//      if (!threadPool.awaitTermination(time, TimeUnit.SECONDS)) {
+//        System.out.println("타임아웃! 종료안됨");
+//        threadPool.shutdownNow();
+//        return null;
+//      } else {
+//        System.out.println("입력함. 종료됨");
+//        return null;
+//      }
+//      
+//    } catch (Exception e) {
+//      System.out.println("예외발생");
+//      return null;
+//    }
+//  }
+
 }

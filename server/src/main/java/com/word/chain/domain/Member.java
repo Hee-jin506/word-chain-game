@@ -7,7 +7,7 @@ public class Member {
   private String computer = "컴퓨터";
   private WordList usedWords = new WordList();
   private boolean teachingComputer = true;
-  private int maxLevel;
+  private int maxLevel = 1;
   
   
 
