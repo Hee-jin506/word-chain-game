@@ -13,6 +13,7 @@ public class LogInCommand implements Command {
   public LogInCommand(List<Member> list) {
     this.memberList = list;
   }
+
   @Override
   public void execute(PrintWriter out, BufferedReader in) {
     try {

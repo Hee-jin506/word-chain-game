@@ -26,6 +26,7 @@ public class AddMemberCommand implements Command {
       member.setComputer(Prompt.inputString("상대 이름: ", out, in));
 
       memberList.add(member);
+      System.out.println("회원가입이 완료되었습니다!");
 
     } catch (Exception e) {
       out.printf("잘못된 접근입니다. - %s\n", e.getMessage());

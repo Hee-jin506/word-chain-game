@@ -2,32 +2,19 @@ package com.word.chain.command;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.util.List;
+import com.word.chain.domain.Member;
 import com.word.chain.domain.WordList;
 import com.word.util.Prompt;
 
 public class PlaySingleGameCommand implements Command {
 
-  ArrayList<WordList> levelWords = new ArrayList<>();
+  List<Member> memberList;
+  List<WordList> levelList;
 
-  {
-    for (int i = 0; i < 10; i++) {
-      WordList words = new WordList();
-      words.add("admin");
-      words.add("bus");
-      words.add("car");
-      words.add("dirt");
-      words.add("enum");
-      words.add("flower");
-      words.add("gun");
-      words.add("humble");
-      words.add("image");
-      words.add("juice");
-      words.add("king");
-      words.add("large");
-
-      levelWords.add(words);
-    }
+  public PlaySingleGameCommand(List<Member> memberList, List<WordList> levelList) {
+    this.memberList = memberList;
+    this.levelList = levelList;
   }
 
   @Override
@@ -60,7 +47,7 @@ public class PlaySingleGameCommand implements Command {
 
   public void from1To3(int level, PrintWriter out, BufferedReader in) throws Exception {
     boolean win = false;
-    WordList words = levelWords.get(level-1);
+    WordList words = levelList.get(level-1);
     out.println("10초 안에 단어를 입력하세요!");
 
     for (int i = 5; i >= 1; i--) {
