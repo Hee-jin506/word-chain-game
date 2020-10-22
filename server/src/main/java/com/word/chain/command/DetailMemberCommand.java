@@ -28,8 +28,8 @@ public class DetailMemberCommand implements Command {
 
       out.printf("이름: %s\n", member.getName());
       out.printf("최대 달성 레벨: %s\n", member.getMaxLevel());
-      out.println("(내 단어)");
-      member.getUsedWords().list();
+      out.println("(사용 단어)");
+      member.getUsedWords().list(out, in);
 
     } catch (Exception e) {
       out.printf("잘못된 접근입니다. - %s\n", e.getMessage());

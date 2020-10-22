@@ -33,6 +33,7 @@ public class LogInCommand implements Command {
       out.println("가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.");
       return;
     }
+      out.println("로그인 성공!");
 
     } catch (Exception e) {
       out.printf("작업 처리 중 오류 발생! - %s\n", e.getMessage());

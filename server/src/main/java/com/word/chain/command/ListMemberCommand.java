@@ -22,7 +22,7 @@ public class ListMemberCommand implements Command {
 
     while (iterator.hasNext()) {
       Member member = iterator.next();
-      out.printf("%s, %s, %s\n",
+      out.printf("아이디: %s, 이름: %s, 레벨: %s\n",
           member.getId(),
           member.getName(),
           member.getMaxLevel());
