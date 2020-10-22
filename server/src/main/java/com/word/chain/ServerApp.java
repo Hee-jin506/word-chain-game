@@ -142,22 +142,16 @@ public class ServerApp {
 
         request = in.readLine();
 
-        if (request.equalsIgnoreCase("stop")) {
-          stop = true; // 서버의 상태를 멈추라는 의미로 true로 설정한다.
-          out.println("서버를 종료하는 중입니다!");
-          out.println();
-          out.flush();
-          return;
-        }
-        
         switch (request) {
           case "1":
-            request = "/member/add";
+            ((Command)context.get("/member/add")).execute(out, in);
             break;
           case "2":
-            request = "/member/login";
+            ((Command)context.get("/member/login")).execute(out, in);
             break;
-          case "3":
+          case "quit":
+            break;
+          case "stop":
             break;
           default:
             out.println("유효하지 않은 명령입니다.");
@@ -170,19 +164,11 @@ public class ServerApp {
         out.println("(2) 멀티 게임");
         out.println("(3) 설정");
         out.println("(4) 로그아웃");
-        out.println("(5) 나가기");
+        out.println("(quit) 나가기");
         out.println();
         out.flush();
 
         request = in.readLine();
-        
-        if (request.equalsIgnoreCase("stop")) {
-          stop = true; // 서버의 상태를 멈추라는 의미로 true로 설정한다.
-          out.println("서버를 종료하는 중입니다!");
-          out.println();
-          out.flush();
-          return;
-        }
 
         switch (request) {
           case "1":
@@ -197,31 +183,34 @@ public class ServerApp {
           case "4":
             request = "/member/logout";
             break;
-          case "5":
+          case "quit":
+            break;
+          case "stop":
             break;
           default:
             out.println("유효하지 않은 명령입니다.");
             out.flush();
         }
-      }
 
-      Command command = (Command) context.get(request);
+        Command command = (Command) context.get(request);
 
-      if (command == null) {
-        out.println("해당 명령을 처리할 수 없습니다!");
-      } else {
-        
-        if (command instanceof LoggedInCommand) 
+        if (command != null) {
           ((LoggedInCommand)command).registerMember(id);
-        
-        command.execute(out, in);
+          command.execute(out, in);
+        }
+      }
+      
+      if (request.equalsIgnoreCase("stop")) {
+        stop = true; // 서버의 상태를 멈추라는 의미로 true로 설정한다.
+        out.println("서버를 종료하는 중입니다!");
       }
 
       out.println();
       out.flush();
 
     } catch (Exception e) {
-      System.out.println("클라이언트와의 통신 오류!");
+      System.out.println("클라이언트와의 통신 오류! " );
+      e.printStackTrace();
     }
 
     System.out.printf("클라이언트(%s)와의 연결을 끊었습니다.\n",

@@ -15,6 +15,8 @@ import com.word.util.Prompt;
 //
 public class ClientApp {
   
+  static boolean stop = false;
+  
   static String id = "";
   
   public static void main(String[] args) {
@@ -29,6 +31,9 @@ public class ClientApp {
         PrintWriter out = new PrintWriter(socket.getOutputStream());
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
 
+        if (stop) {
+          break;
+        }
         out.println(id);
         out.flush();
         
@@ -36,16 +41,15 @@ public class ClientApp {
         
         String input = Prompt.inputString("숫자를 입력하세요.");
 
-        if (input.equalsIgnoreCase("quit"))
-          break;
         
         out.println(input);
         out.flush();
         
-        if (input.equalsIgnoreCase("stop"))
+        if (input.equalsIgnoreCase("quit"))
           break;
-        
         receiveResponse(out, in);
+        if (input.equalsIgnoreCase("stop"))
+          stop = true;
         
     } catch (Exception e) {
       e.printStackTrace();
