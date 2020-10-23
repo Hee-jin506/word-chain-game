@@ -1,6 +1,35 @@
 # word-chain-game
 ## 끝말잇기 콘솔 게임
 
+>  2020.10.23일
+
+```
+                    _         _         _
+ _ _ _  ___  ___  _| |   ___ | |_  ___ |_| ___    ___  ___  _____  ___
+| | | || . ||  _|| . |  |  _||   || .'|| ||   |  | . || .'||     || -_|
+|_____||___||_|  |___|  |___||_|_||__,||_||_|_|  |_  ||__,||_|_|_||___|
+                                                 |___|
++----------------------------------------------------------------------+
+/                     끝말잇기 고수가 될 날을 위해!                           /
++----------------------------------------------------------------------+
+\                              < MENU >                                \
++----------------------------------------------------------------------+
+/                                                                      /
+\                            1. 싱글 게임                                \
+/                                                                      /
+\                            2. 멀티 게임                                \
+/                                                                      /
+\                            3. 설정                                    \
+/                                                                      /
+\                            4. 로그아웃                                 \
+/                                                                      /
+\                            quit. 나가기                                \
+/                                                                      /
++----------------------------------------------------------------------+
+\ 명령어의 번호를 입력해주세요!                                               \
++----------------------------------------------------------------------+
+```
+
 ### CS 프로그램
 
 - **부분 `stateful` 방식** : 서버와 클라이언트의 통신은 다음과 같은 형식을 갖는다.
@@ -35,7 +64,124 @@
 - `멀티게임`은 준비 중인 서비스이다.
 - `관리자의 기능`으로 회원의 정보를 간단히 조회할 수 있다.
 
-### 한계
-
 ### 클래스 구조
+
+#### [Command Design Pattern]
+
+- 사용자의 요구사항에 따른 작업 당 한개의 일관적인 클래스를 만들어 관리한다. Command라는 인터페이스를 구현하는 모든 작업 수행 객체들은 execute라는 추상 메서드안에서 작업을 수행한다. 
+
+- LoggedInCommand 추상 클래스 : Command 구현체들 중 로그인된 회원의 정보를 다뤄야하는 것들은 Command를 구현하는 추상 클래스 LoggedInMember를 상속받는다. 이 추상 클래스는 다음과 같은 메서드를 갖는다.
+  - List<Member> memberList : 특정 회원을 조회하기 위한 전체 회원 목록을 저장할 필드
+  - LoggedInMember : 작업을 수행할 때 다뤄야할 로그인된 회원 객체를 저장할 필드
+  - registerMember(String id) : ServerApp에서 클라이언트에서 전송받은 id를 그대로 파라미터로 넘겨주면 findById()를 통해 id가 아이디와 일치하는 회원을 리턴받고, 이를 LoggedInMember에 저장하는 메서드
+  - findById(String id) : memberList에서 파라미터로 받은 id와 아이디가 일치하는 회원을 찾아 리턴하는 메서드
+- Command 클래스드의 구조는 다음과 같다.
+  - com.word.chain.command 패키지
+    - Command 인터페이스
+      - LoggedInMember 추상 클래스
+        - LogOutCommand 클래스
+        - PlaySingleGameCommand 클래스
+        - PlayMultiGameCommand 클래스
+        - SettingsCommand 클래스
+      - ListMemberCommand 클래스
+      - AddMemberCommand 클래스
+      - LogInCommand 클래스
+
+#### [Observer Design Pattern]
+
+- 옵저버 패턴을 사용하여 ServerApp에서 서비스를 시작하고 끝날 때 필요한 작업을 수행할 수 있도록 한다. 가령, 전체 회원 목록이나, 각 레벨들의 기본 단어 목록, 그리고 Command 객체를 저장하고 로딩하는 작업을 DataHandlerListener가 수행하고, Command 객체를 클라이언트의요청 메시지를 키값으로 Map에 저장하고 꺼내는 일을 하는 작업은 RequestMappingListener가 수행한다.
+
+- com.word.context 패키지
+  - ApplicationContextListener 인터페이스
+- com.word.listener 패키지
+  - DataHandlerListener 클래스
+  - RequestMappingListener 클래스
+
+### 타이머 기능
+
+#### [사용자에게 입력을 받는 중에 정해진 시간이 지나면 취소하는 기능은 어떻게 구현해야할까??]
+
+- 타이머를 각별히 생각했던 것은 게임이 게임다워지기 위한 필수 조건들 중 하나이기 때문이다. 일찍이 포기한 것은 사용자가 입력한 단어들이 정말 단어가 맞는지 확인하는 것이다. 이것을 구현하기 위해서는 외부 사전 사이트에서 검색 요청을 한다든지, 혹은 흔히 알려진 모든 단어를 데이터 베이스로 관리하는 수밖에 없었고, 그것은 24시간 안에 구현할 수 없는 것이었다. 따라서 그것은 일찍이 포기했지만 마지막으로 부여잡은 하나의 조건이 타임아웃 기능이었다. 끝말 잇기 놀이를 하는데 시간을 무한정으로 준다면 질 수가 없고, 무엇보다 이길 마음도 안들게 할 것이다.
+- 컴퓨터의 첫 공격을 시작으로 사용자가 그에 맞는 단어를 하나 제시하는 데 정해진 시간이 있어야 했고, 그 시간이 지나면 게임 오버가 되어야 했다. 이런 작업은 서버에서 시간을 재는 방법이 있고, 클라이언트에서 시간을 재는 방법이 있을 텐데, 아무래도 클라이언트에서 시간을 재고, 타임아웃시켜서 타임아웃되었다는 결과를 서버에 전송하는 편이 간단해보였다.
+- 서버에서 클라이언트에게 사용자로부터 5초 안에 입력을 받고, 그에 대한 결과를 클라이언트에게서 받겠다고 요청을 보내는 메시지를 `사용자에게 "출력할 메시지 + !3!{time}"`이렇게 정했다. 이것을 서버에서 보내면 클라이언트는 타이머를 켜두고 사용자에게 입력을 받는데, 입력을 시간 안에 받았다면 그 입력값을, 받지 못했다면 "timeout"을 서버쪽으로 출력한다.
+- 나의 첫번째 시도 : 구글링을 통해 자바 API의 TImer와 TimerTask 클래스를 찾았다. Timer은 말 그대로 원하는 밀리 초 후에 원하는 작업을 수행하도록 돕는 클래스이다. Timer는 생성하면 별도의 스레드가 생성된다. 한편, TimerTask는 Runnable을 구현하는 추상 클래스로 run 메서드에 수행하고자하는 작업을 넣고 Timer의 schedule 메서드의 파라미터로 넘겨주면 schedule 호출과 동시에 별도의 스레드가 분리되어 run이 실행된다. 이 TImer와 TimeTask를 통해 정해진 시간안에 사용자가 입력을 하지 않으면 다른 스레드가 대신 서버에게 "timeout"을 보내면 되겠다고 생각했다. 그러나 이렇게 하면 정해진 시간에 서버에 보내져서 서버에서는 제 시간 안에 게임오버가 될지 언정, 여전히 클라이언트는 엔터를 받지 않는한 무한정 블로킹 되어있는 상태가 된다.
+
+```
+ public static void timer(int title, int time, PrintWriter out, BufferedReader in) {
+    Timer timer = new java.util.Timer();
+    TimerTask task = new TimerTask() {
+      @Override
+      public void run() {
+        out.println("timeout");
+      }
+    };
+    
+    timer.schedule(task, time * 1000);
+    
+    out.println(Prompt.inputString("title"));
+    
+    timer.cancel();
+  }
+```
+
+- 나의 두번째 시도 : 내가 아는 ExecutorService를 이용하면 되지 않을까 싶어 시도해보았다. 블로킹으로 그 이후의 코드가 진행되지 않는다면, 별도의 스레드로 넣어서 정해진 시간이 지나면 통째로 스레드를 날리면 되지 않을까 생각했다. 그렇지만 블로킹이 shutdownNow로 인해 해결될 수 있을 것이라고 짐작한 것은 안일한 생각이었다. 블로킹은 스레드 자체를 완전히 일시정지 시키기 때문에 shutdownNow도 이 스레드에게 어떤 영향도 줄 수 없었다.
+
+```
+  public static String inputStringTimer(String title, int time) {
+    ExecutorService threadPool = Executors.newCachedThreadPool();
+    threadPool.execute(() -> Prompt.inputString(title));
+    threadPool.shutdown();
+    
+    try {
+      if (!threadPool.awaitTermination(time, TimeUnit.SECONDS)) {
+        System.out.println("타임아웃! 종료안됨");
+        threadPool.shutdownNow();
+        return null;
+      } else {
+        System.out.println("입력함. 종료됨");
+        return null;
+      }
+      
+    } catch (Exception e) {
+      System.out.println("예외발생");
+      return null;
+    }
+  }
+```
+
+- 나의 세번쨰 시도 : 강사님의 도움으로, 구글링을 통해 BufferedReader의 ready() 메서드의 존재를 알게 되었다. BufferedReader 객체가 생성된 시점 이후로부터 언제든지 간에 readLine()을 호출할 수 있도록 준비된 상태인지를 확인시켜주는 메서드이다. 즉, 객체가 생성된 시점 이후로부터 inputStream이 연결된 버퍼에 엔터가 한번이라도 들어가있는지 여부를 확인한다. 따라서 만약 BufferedReader를 키보드에 연결 후 시점으로부터 정해진 시간이 지날 때까지 계속해서 ready()를 호출하여 시간 안에 사용자가 엔터를 쳤음을 확인했다면 readLIne()를 하여 입력을 받고, 시간이 지났는데도 여전히 ready()가 false를 리턴한다면 "timeout"을 서버에게 전송해주면 된다.
+
+```
+public static String timer(int time) {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    String input = "";
+    
+    try {
+      int count = 0;
+      while (!br.ready()) {
+        Thread.sleep(100);
+        count += 100;
+        if (count == time * 1000)
+          break;
+      }
+      
+      if (br.ready())
+        input = br.readLine();
+      else {
+        input = "timeout";
+      }
+    } catch (Exception e) {
+      System.out.println("입력 중 오류 발생!");
+    }
+    return input;
+  
+  }
+```
+
+### 개선점
+
+- 사용자의 잘못된 입력으로 인한 예외 처리가 미비하다.
+- 리팩토링이 부족하여 중복된 코드가 군데군데 많고, 너무 코드가 길고, 책임을 크게 지운 메서드가 많다.
+- 멀티 게임이 아직 구현이 되지 않았다. 현재 ServerApp에서 사용하고 있는 포트번호와 또다른 포트 번호를 만들어 서버 소켓을 추가한 뒤, 턴 방식(한 스레드가 두 개의 클라이언트가 붙어서 번갈아 데이터를 주고받는 형식)을 구현해야 한다.
+- 부분적이라고 해도 스레드풀은 효율성을 떨어트린다. 게임은 짧은 순간에 수많은 데이터가 오갈 수 밖에 없으므로 stateful이 오히려 효율적이라고 해도, 게임을 하기 위해 메뉴를 선택하는 과정은 stateless로 만들어야 한다.
 
