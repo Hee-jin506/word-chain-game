@@ -63,10 +63,12 @@ public class ClientApp {
       } else if (response.endsWith("!{}")) {
         out.println(Prompt.inputString(response.split("!")[0]));
         out.flush();
-      } /* else if (response.endsWith("!{time}")) {
-        int time = Integer.parseInt(response.split("!")[0]);
-        timer(time, out);
-      } */ else if (response.equals("!{noid}")) {
+      }  else if (response.endsWith("!{time}")) {
+        System.out.print(response.split("!")[0]);
+        out.println(timer());
+        out.flush();
+        
+      }  else if (response.equals("!{noid}")) {
         id = "";
       } else {
         System.out.println(response);
@@ -74,25 +76,29 @@ public class ClientApp {
     }
   }
   
-  //public static void timer(int time, PrintWriter out) {
-//    System.out.println("5초 셉니다.");
-//    Thread thread =new Thread() {
-//      @Override
-//      public void run() {
-//        Prompt.inputString("5초 셉니다.");
-//      }
-//    };
-//    thread.start();
-//    Timer timer = new Timer();
-//    TimerTask task = new TimerTask() {
-//      @Override
-//      public void run() {
-//        thread.interrupt();
-//        out.println("timeout");
-//      }
-//    };
-//    
-//    timer.schedule(task, 5000);
-//  }
+  public static String timer() {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    String input = "";
+    
+    try {
+      int count = 0;
+      while (!br.ready()) {
+        Thread.sleep(100);
+        count += 100;
+        if (count == 5000)
+          break;
+      }
+      
+      if (br.ready())
+        input = br.readLine();
+      else {
+        input = "timeout";
+      }
+    } catch (Exception e) {
+      System.out.println("입력 중 오류 발생!");
+    }
+    return input;
+  
+  }
 }
  

@@ -92,6 +92,10 @@ public class PlaySingleGameCommand extends LoggedInCommand {
         words.add(word);
     }
 
+    out.println("+-----------------------------+");
+    out.println("| 5초 안에 단어를 입력하세요. |");
+    out.println("+-----------------------------+");
+    out.println();
     out.println("곧 끝말잇기 게임이 시작됩니다...!");
     out.flush();
 
@@ -111,10 +115,11 @@ public class PlaySingleGameCommand extends LoggedInCommand {
     out.printf("%s : %s\n", computer, attack);
 
     while (true) {
-      String defense = Prompt.inputString("당신 : ", out, in);
-      out.println();
+      out.println("당신 : !{time}");
+      out.flush();
+      String defense = in.readLine();
       
-      if (defense.equals("")) {
+      if (defense.equals("timeout")) {
         out.println("시간 초과!");
         break;
       } else if (usedWords.contains(defense)) {
