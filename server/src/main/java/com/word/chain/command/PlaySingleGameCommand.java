@@ -120,14 +120,14 @@ public class PlaySingleGameCommand extends LoggedInCommand {
       }
 
       if (i == 3) {
-        out.printf("%s : %c\n", computer, defense.charAt(defense.length() - 1));
+        out.printf("%s : %c ", computer, defense.charAt(defense.length() - 1));
         out.flush();
         for (int j = 0; j < 4; j++) {
           Thread.sleep(500);
           out.print(". ");
           out.flush();
         }
-        out.println("\n컴퓨터는 더이상 단어가 떠오르지 않습니다.");
+        out.printf("\n%s는 더이상 단어가 떠오르지 않습니다.\n", computer);
         win = true;
         break;
       }

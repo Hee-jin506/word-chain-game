@@ -35,7 +35,7 @@ public class SettingsCommand extends LoggedInCommand {
             break;
           case "3":
             loggedInMember.setTeachingComputer(
-                (Prompt.inputString("컴퓨터 데이터 학습 여부 설정(Y/f): ", out, in).equalsIgnoreCase("n")) ? false : true);
+                (Prompt.inputString("컴퓨터 데이터 학습 여부 설정(Y/n): ", out, in).equalsIgnoreCase("n")) ? false : true);
             break;
           case "4":
             return;
