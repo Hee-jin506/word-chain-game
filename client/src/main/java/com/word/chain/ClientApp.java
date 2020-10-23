@@ -32,7 +32,7 @@ public class ClientApp {
         
         receiveResponse(out, in);
         
-        String input = Prompt.inputString("숫자를 입력하세요.");
+        String input = Prompt.inputString("> ");
 
         
         out.println(input);

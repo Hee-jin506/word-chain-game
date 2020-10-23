@@ -21,11 +21,27 @@ public class PlaySingleGameCommand extends LoggedInCommand {
   public void execute(PrintWriter out, BufferedReader in) {
     try {
       while (true) {
-        out.println("[싱글게임]");
-        out.println("(1) 처음부터");
-        out.println("(2) 불러오기");
-        out.println("(3) 메인메뉴");
-        String response = Prompt.inputString("숫자를 입력하세요. : ", out, in);
+        out.println("                    _         _         _                              ");
+        out.println(" _ _ _  ___  ___  _| |   ___ | |_  ___ |_| ___    ___  ___  _____  ___ ");
+        out.println("| | | || . ||  _|| . |  |  _||   || .'|| ||   |  | . || .'||     || -_|");
+        out.println("|_____||___||_|  |___|  |___||_|_||__,||_||_|_|  |_  ||__,||_|_|_||___|");
+        out.println("                                                 |___|                 ");
+        out.println("+----------------------------------------------------------------------+");
+        out.println("/                     끝말잇기 게임을 시작해볼까요?!                   /");
+        out.println("+----------------------------------------------------------------------+");
+        out.println("\\                              < MENU >                                \\");
+        out.println("+----------------------------------------------------------------------+");
+        out.println("/                                                                      /");
+        out.println("\\                            1. 처음부터                               \\");
+        out.println("/                                                                      /");
+        out.println("\\                            2. 불러오기                               \\");
+        out.println("/                                                                      /");
+        out.println("\\                            3. 메인 메뉴                              \\");
+        out.println("/                                                                      /");
+        out.println("+----------------------------------------------------------------------+");
+        out.println("\\ 명령어의 번호를 입력해주세요!                                        \\");
+        out.println("+----------------------------------------------------------------------+");
+        String response = Prompt.inputString("> ", out, in);
 
         loop:
           switch (response) {
@@ -81,11 +97,13 @@ public class PlaySingleGameCommand extends LoggedInCommand {
 
     for (int i = 5; i >= 1; i--) {
       Thread.sleep(500);
-      out.print(i + " ");
+      out.println(i + " ");
+      out.println();
       out.flush();
     }
-
-    out.printf("\n[level%d 시작!]\n", level);
+    out.println("+---------------+");
+    out.printf("| level%2d 시작! |\n", level);
+    out.println("+---------------+");
     out.flush();
 
     String attack = words.firstAttack();
@@ -94,6 +112,8 @@ public class PlaySingleGameCommand extends LoggedInCommand {
 
     while (true) {
       String defense = Prompt.inputString("당신 : ", out, in);
+      out.println();
+      
       if (defense.equals("")) {
         out.println("시간 초과!");
         break;
@@ -101,7 +121,7 @@ public class PlaySingleGameCommand extends LoggedInCommand {
         out.println("이미 사용된 단어입니다.");
         break;
       } else if (defense.charAt(0) == attack.charAt(attack.length() - 1)) {
-        out.println("ok!");
+        out.println("OK!");
         usedWords.add(defense);
         super.loggedInMember.getUsedWords().add(defense);
       } else {
@@ -109,6 +129,7 @@ public class PlaySingleGameCommand extends LoggedInCommand {
         break;
       }
 
+      out.println();
       int i = 0;
       for (; i < 3; i++) {
         attack = words.attack(defense);
@@ -132,9 +153,14 @@ public class PlaySingleGameCommand extends LoggedInCommand {
         break;
       }
     }
+    
+    out.println();
 
     if (win) {
-      out.printf("[level%d 클리어]\n", level);
+      out.println("+-----------------+");
+      out.printf ("| level%2d 클리어 |\n", level);
+      out.println("+-----------------+");
+      out.println();
       String nextLevel = Prompt.inputString("다음 레벨을 이어 하시겠습니까?(Y/n) : ", out, in);
       if (nextLevel.equalsIgnoreCase("n")) {
         out.println("메인 메뉴로 갑니다.");
@@ -146,7 +172,10 @@ public class PlaySingleGameCommand extends LoggedInCommand {
         playSingle(level + 1, out, in);
       }
     } else {
-      out.println("[게임오버]");
+      out.println("+------------+");
+      out.printf ("| 게임 오버! |\n", level);
+      out.println("+------------+");
+      out.println();
       String retry  = Prompt.inputString("다시 시도하시겠습니까?(Y/n) : ", out, in);
       if (retry.equalsIgnoreCase("n")) {
         out.println("메인 메뉴로 갑니다.");
