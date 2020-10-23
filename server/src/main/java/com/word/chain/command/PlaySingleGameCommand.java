@@ -46,7 +46,7 @@ public class PlaySingleGameCommand extends LoggedInCommand {
         loop:
           switch (response) {
             case "1":
-              playSingle(1, out, in);
+              playFrom1To3(1, out, in);
               return;
             case "2":
               out.printf("당신은 %d레벨까지 클리어했습니다.\n", super.loggedInMember.getMaxLevel());
@@ -64,7 +64,14 @@ public class PlaySingleGameCommand extends LoggedInCommand {
                   break;
                 }
               }
-              playSingle(level, out, in);
+              
+              if (level >= 1 && level <= 3)
+                playFrom1To3(level, out, in);
+              else if (level >= 4 && level <= 7)
+                playFrom4To7(level, out, in);
+              else if (level >= 8 && level <= 10)
+                playFrom8To10(level, out, in);
+              
               break;
             case "3":
               return;
@@ -77,8 +84,21 @@ public class PlaySingleGameCommand extends LoggedInCommand {
       out.println("싱글게임 중 문제 발생");
     }
   }
+  
+  public void playFrom1To3(int level, PrintWriter out, BufferedReader in) throws Exception {
+    playSingle(level, out, in, 8);
+  }
+  
+  public void playFrom4To7(int level, PrintWriter out, BufferedReader in) throws Exception {
+    playSingle(level, out, in, 5);
+  }
+  
+  public void playFrom8To10(int level, PrintWriter out, BufferedReader in) throws Exception {
+    playSingle(level, out, in, 3);
+  }
+  
 
-  public void playSingle(int level, PrintWriter out, BufferedReader in) throws Exception {
+  public void playSingle(int level, PrintWriter out, BufferedReader in, int time) throws Exception {
     String computer = super.loggedInMember.getComputer();
     List<String> usedWords = new ArrayList<>();
     boolean win = false;
@@ -93,7 +113,7 @@ public class PlaySingleGameCommand extends LoggedInCommand {
     }
 
     out.println("+-----------------------------+");
-    out.println("| 5초 안에 단어를 입력하세요. |");
+    out.printf("| %d초 안에 단어를 입력하세요. |\n", time);
     out.println("+-----------------------------+");
     out.println();
     out.println("곧 끝말잇기 게임이 시작됩니다...!");
@@ -105,6 +125,7 @@ public class PlaySingleGameCommand extends LoggedInCommand {
       out.println();
       out.flush();
     }
+    
     out.println("+---------------+");
     out.printf("| level%2d 시작! |\n", level);
     out.println("+---------------+");
@@ -115,7 +136,7 @@ public class PlaySingleGameCommand extends LoggedInCommand {
     out.printf("%s : %s\n", computer, attack);
 
     while (true) {
-      out.println("당신 : !{time}");
+      out.printf("당신 : !%d!{time}\n", time);
       out.flush();
       String defense = in.readLine();
       
@@ -168,7 +189,7 @@ public class PlaySingleGameCommand extends LoggedInCommand {
       out.println();
       String nextLevel = Prompt.inputString("다음 레벨을 이어 하시겠습니까?(Y/n) : ", out, in);
       if (nextLevel.equalsIgnoreCase("n")) {
-        out.println("메인 메뉴로 다시 돌아갑니다.");
+        out.println("게임 메뉴로 다시 돌아갑니다.");
         out.flush();
         try {
           Thread.sleep(2000);
@@ -180,7 +201,12 @@ public class PlaySingleGameCommand extends LoggedInCommand {
         return;
 
       } else {
-        playSingle(level + 1, out, in);
+        if (level + 1 >= 1 && level + 1<= 3)
+          playFrom1To3(level + 1, out, in);
+        else if (level + 1 >= 4 && level + 1 <= 7)
+          playFrom4To7(level + 1, out, in);
+        else if (level + 1 >= 8 && level + 1 <= 10)
+          playFrom8To10(level + 1, out, in);
       }
     } else {
       out.println("+------------+");
@@ -189,7 +215,7 @@ public class PlaySingleGameCommand extends LoggedInCommand {
       out.println();
       String retry  = Prompt.inputString("다시 시도하시겠습니까?(Y/n) : ", out, in);
       if (retry.equalsIgnoreCase("n")) {
-        out.println("메인 메뉴로 다시 돌아갑니다.");
+        out.println("게임 메뉴로 다시 돌아갑니다.");
         out.flush();
         if (super.loggedInMember.getMaxLevel() < level - 1) 
           super.loggedInMember.setMaxLevel(level - 1);
@@ -199,7 +225,12 @@ public class PlaySingleGameCommand extends LoggedInCommand {
           
         }
       } else {
-        playSingle(level, out, in);
+        if (level >= 1 && level <= 3)
+          playFrom1To3(level, out, in);
+        else if (level >= 4 && level <= 7)
+          playFrom4To7(level, out, in);
+        else if (level >= 8 && level <= 10)
+          playFrom8To10(level, out, in);
       }
     }
   }

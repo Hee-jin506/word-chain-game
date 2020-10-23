@@ -65,7 +65,7 @@ public class ClientApp {
         out.flush();
       }  else if (response.endsWith("!{time}")) {
         System.out.print(response.split("!")[0]);
-        out.println(timer());
+        out.println(timer(Integer.parseInt(response.split("!")[1])));
         out.flush();
         
       }  else if (response.equals("!{noid}")) {
@@ -76,7 +76,7 @@ public class ClientApp {
     }
   }
   
-  public static String timer() {
+  public static String timer(int time) {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     String input = "";
     
@@ -85,7 +85,7 @@ public class ClientApp {
       while (!br.ready()) {
         Thread.sleep(100);
         count += 100;
-        if (count == 5000)
+        if (count == time * 1000)
           break;
       }
       
