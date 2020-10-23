@@ -163,7 +163,13 @@ public class PlaySingleGameCommand extends LoggedInCommand {
       out.println();
       String nextLevel = Prompt.inputString("다음 레벨을 이어 하시겠습니까?(Y/n) : ", out, in);
       if (nextLevel.equalsIgnoreCase("n")) {
-        out.println("메인 메뉴로 갑니다.");
+        out.println("메인 메뉴로 다시 돌아갑니다.");
+        out.flush();
+        try {
+          Thread.sleep(2000);
+        } catch (Exception e) {
+          
+        }
         if (super.loggedInMember.getMaxLevel() < level) 
           super.loggedInMember.setMaxLevel(level);
         return;
@@ -178,7 +184,15 @@ public class PlaySingleGameCommand extends LoggedInCommand {
       out.println();
       String retry  = Prompt.inputString("다시 시도하시겠습니까?(Y/n) : ", out, in);
       if (retry.equalsIgnoreCase("n")) {
-        out.println("메인 메뉴로 갑니다.");
+        out.println("메인 메뉴로 다시 돌아갑니다.");
+        out.flush();
+        if (super.loggedInMember.getMaxLevel() < level - 1) 
+          super.loggedInMember.setMaxLevel(level - 1);
+        try {
+          Thread.sleep(2000);
+        } catch (Exception e) {
+          
+        }
       } else {
         playSingle(level, out, in);
       }

@@ -26,6 +26,8 @@ public class WordList extends ArrayList<String> {
     for (String candidate : this)
       if (candidate.charAt(0) == first)
         candidates.add(candidate);
+    if (candidates.size()==0)
+      return null;
     return candidates.get((int)(Math.random() * candidates.size()));
   }
 

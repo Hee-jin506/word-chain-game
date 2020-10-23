@@ -17,28 +17,23 @@ public class SettingsCommand extends LoggedInCommand {
     while (true) {
       try {
 
-        out.println("+----------------------------------------------------------------------+");
-        out.println("/                              <Settings>                              /");
-        out.println("+----------------------------------------------------------------------+");
-        out.printf("/                         1. 사용자 이름 변경 [%s]                    /\n", loggedInMember.getName());
-        out.printf("\\                         2. 컴퓨터 이름 변경 [%s]                 \\\n", loggedInMember.getComputer());
         String computerLearning = (loggedInMember.isTeachingComputer()) ? "[on]" : "[off]";
-        out.printf("/                         3. 컴퓨터 데이터 학습 여부 설정 %s         /\n", computerLearning);
-        out.println("\\                         4. 메인 메뉴로 돌아가기                      \\");
+        out.println("+----------------------------------------------------------------------+");
+        out.println("/                             < Settings >                             /");
+        out.println("+----------------------------------------------------------------------+");
+        out.println("\\                                                                      \\");
+        out.printf ("/                       1. 사용자 이름 변경 [%s]                     /\n", loggedInMember.getName());
+        out.println("\\                                                                      \\");
+        out.printf ("/                       2. 컴퓨터 이름 변경 [%s]                     /\n", loggedInMember.getComputer());
+        out.println("\\                                                                      \\");
+        out.printf ("/                       3. 컴퓨터 데이터 학습 여부 설정 %s           /\n", computerLearning);
+        out.println("\\                                                                      \\");
+        out.println("/                       4. 메인 메뉴로 돌아가기                        /");
+        out.println("\\                                                                      \\");
         out.println("+----------------------------------------------------------------------+");
         out.println("/                          숫자를 입력하세요                           /");
         out.println("+----------------------------------------------------------------------+");
-
-
-
-
-
-        out.println("[설정]");
-        out.printf("(1) 당신의 이름 변경 [%s]\n", loggedInMember.getName());
-        out.printf("(2) 컴퓨터의 이름 변경 [%s]\n", loggedInMember.getComputer());
-
-        out.println("(3) 컴퓨터 데이터 학습 여부 설정 변경 " + computerLearning);
-        out.println("(4) 메인 메뉴로 돌아가기");
+        Prompt.inputString("> ", out, in);
 
         switch (Prompt.inputString("숫자를 입력하세요 : ", out, in)) {
           case "1":

@@ -6,6 +6,7 @@ import com.word.chain.command.AddMemberCommand;
 import com.word.chain.command.ListMemberCommand;
 import com.word.chain.command.LogInCommand;
 import com.word.chain.command.LogOutCommand;
+import com.word.chain.command.PlayMultiGameCommand;
 import com.word.chain.command.PlaySingleGameCommand;
 import com.word.chain.command.SettingsCommand;
 import com.word.chain.domain.Member;
@@ -28,6 +29,7 @@ public class RequestMappingListener implements ApplicationContextListener {
     context.put("/member/logout", new LogOutCommand(memberList));
     context.put("/member/list", new ListMemberCommand(memberList));
     context.put("/play/single", new PlaySingleGameCommand(memberList, levelList));
+    context.put("/play/multi", new PlayMultiGameCommand(memberList, levelList));
     context.put("/member/settings", new SettingsCommand(memberList));
   }
 
